@@ -26,12 +26,11 @@ class Agent:
         self.epsilon = params['epsilon']
         self.agent_run_mode = params['agent_run_mode']
         self.agent_act_level = params['agent_act_level']
-        
 
     def initialize_episode(self):
         """ Initialize a new episode. This function is called every time a new episode is run. """
-        self.current_action = {}                    #   TODO Changed this variable's name to current_action
-        self.current_action['diaact'] = None        #   TODO Does it make sense to call it a state if it has an act? Which act? The Most recent?
+        self.current_action = {}
+        self.current_action['diaact'] = None
         self.current_action['inform_slots'] = {}
         self.current_action['request_slots'] = {}
         self.current_action['turn'] = 0
@@ -81,7 +80,7 @@ class Agent:
        
     def add_nl_to_action(self, agent_action):
         """ Add NL to Agent Dia_Act """
-        
+
         if agent_action['act_slot_response']:
             agent_action['act_slot_response']['nl'] = ""
             user_nlg_sentence = self.nlg_model.convert_diaact_to_nl(agent_action['act_slot_response'], 'agt') #self.nlg_model.translate_diaact(agent_action['act_slot_response']) # NLG

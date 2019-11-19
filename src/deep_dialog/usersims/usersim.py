@@ -53,7 +53,7 @@ class UserSimulator:
     
     def add_nl_to_action(self, user_action):
         """ Add NL to User Dia_Act """
-        
+
         user_nlg_sentence = self.nlg_model.convert_diaact_to_nl(user_action, 'usr')
         user_action['nl'] = user_nlg_sentence
         

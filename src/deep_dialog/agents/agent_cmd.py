@@ -125,7 +125,7 @@ class AgentCmd(Agent):
     
     def add_nl_to_action(self, agent_action):
         """ Add NL to Agent Dia_Act """
-        
+
         if self.agent_input_mode == 1:
             if agent_action['act_slot_response']:
                 agent_action['act_slot_response']['nl'] = ""
@@ -135,4 +135,3 @@ class AgentCmd(Agent):
                 agent_action['act_slot_value_response']['nl'] = ""
                 user_nlg_sentence = self.nlg_model.convert_diaact_to_nl(agent_action['act_slot_value_response'], 'agt')
                 agent_action['act_slot_response']['nl'] = user_nlg_sentence
-                

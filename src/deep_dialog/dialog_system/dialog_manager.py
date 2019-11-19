@@ -69,6 +69,7 @@ class DialogManager:
             self.state_tracker.update(user_action = self.user_action)
             self.print_function(user_action = self.user_action)
 
+
         ########################################################################
         #  Inform agent of the outcome for this timestep (s_t, a_t, r, s_{t+1}, episode_over)
         ########################################################################

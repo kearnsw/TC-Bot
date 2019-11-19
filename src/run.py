@@ -355,9 +355,10 @@ def run_episodes(count, status):
     
     for episode in tqdm(xrange(count)):
         print ("Episode: %s" % (episode))
-        dialog_manager.initialize_episode()
-        episode_over = False
         dialog = []
+        dialog_manager.initialize_episode()
+        dialog.append(dialog_manager.user_action["nl"])
+        episode_over = False
         while(not episode_over):
             episode_over, reward = dialog_manager.next_turn()
             cumulative_reward += reward

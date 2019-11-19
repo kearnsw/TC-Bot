@@ -27,6 +27,7 @@ RL: python run.py --agt 9 --usr 1 --max_turn 40 --movie_kb_path .\deep_dialog\da
 """
 
 
+from tqdm import tqdm
 import argparse, json, copy, os
 import cPickle as pickle
 
@@ -292,7 +293,7 @@ def simulation_epoch(simulation_epoch_size):
     cumulative_turns = 0
     
     res = {}
-    for episode in xrange(simulation_epoch_size):
+    for episode in tqdm(xrange(simulation_epoch_size)):
         dialog_manager.initialize_episode()
         episode_over = False
         while(not episode_over):
@@ -301,8 +302,6 @@ def simulation_epoch(simulation_epoch_size):
             if episode_over:
                 if reward > 0: 
                     successes += 1
-                    print ("simulation episode %s: Success" % (episode))
-                else: print ("simulation episode %s: Fail" % (episode))
                 cumulative_turns += dialog_manager.state_tracker.turn_count
     
     res['success_rate'] = float(successes)/simulation_epoch_size
@@ -319,7 +318,7 @@ def warm_start_simulation():
     
     res = {}
     warm_start_run_epochs = 0
-    for episode in xrange(warm_start_epochs):
+    for episode in tqdm(xrange(warm_start_epochs)):
         dialog_manager.initialize_episode()
         episode_over = False
         while(not episode_over):
@@ -328,8 +327,6 @@ def warm_start_simulation():
             if episode_over:
                 if reward > 0: 
                     successes += 1
-                    print ("warm_start simulation episode %s: Success" % (episode))
-                else: print ("warm_start simulation episode %s: Fail" % (episode))
                 cumulative_turns += dialog_manager.state_tracker.turn_count
         
         warm_start_run_epochs += 1
@@ -356,23 +353,23 @@ def run_episodes(count, status):
         warm_start_simulation()
         print ('warm_start finished, start RL training ...')
     
-    for episode in xrange(count):
+    for episode in tqdm(xrange(count)):
         print ("Episode: %s" % (episode))
         dialog_manager.initialize_episode()
         episode_over = False
-        
+        dialog = []
         while(not episode_over):
             episode_over, reward = dialog_manager.next_turn()
             cumulative_reward += reward
-                
+            dialog.append(dialog_manager.agent_action["act_slot_response"]["nl"])
+            dialog.append(dialog_manager.user_action["nl"])
             if episode_over:
                 if reward > 0:
-                    print ("Successful Dialog!")
                     successes += 1
-                else: print ("Failed Dialog!")
-                
+
                 cumulative_turns += dialog_manager.state_tracker.turn_count
-        
+        print("\n".join(dialog))
+
         # simulation
         if agt == 9 and params['trained_model_path'] == None:
             agent.predict_mode = True
